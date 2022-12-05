@@ -1,0 +1,32 @@
+---
+
+- name: download from github
+  hosts: localhost
+  tasks:
+
+  - name: download from git hub
+    shell: git clone https://github.com/parthasgithub/dockers.git
+    args:
+      chdir: /root
+    register: git
+  - name: print the git excution
+    debug:
+      msg: "{{git}}"
+#  - name: rm .git from docker dir
+#    shell: rm -rf .git
+#    args:
+#      chdir: /root/dockers
+#    register: delete
+#    tags: delete-git
+#  - name: print the deletion of .git
+#    debug:
+#      msg: "{{delete}}"
+  - name: remove .git dir within /root/dockers
+    file:
+      path: /root/dockers/.git
+      state: absent
+    register: delete
+  - name: exction of removed dir
+    debug: 
+      msg: "{{delete}}"
+

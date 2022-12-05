@@ -1,0 +1,50 @@
+---
+- name: setting up docker
+  hosts: all
+  tasks:
+ 
+  - name: ping test
+    ping:
+
+  - name: yum install epel-release
+    yum: 
+      name: epel-release
+      state: latest
+ 
+  - name: yum add docker repo
+    yum_repository: 
+      name: docker
+      description: docker repo add
+      baseurl: https://download.docker.com/linux/centos/docker-ce.repo
+  
+  - name: yum install docker
+    yum:
+      name: docker
+      state: latest
+    register: download
+  - name: print the download output
+    debug: 
+      msg: {{download}}
+
+
+- name: download from github
+  hosts: all
+  tasks:
+
+  - name: download from git hub
+    shell: git clone https://github.com/parthasgithub/dockers.git
+    args:
+      chdir: /root
+    register: git
+  - name: print the git excution
+    debug:
+      msg: "{{git}}"
+  - name: remove .git dir within /root/dockers
+    file:
+      path: /root/dockers/.git
+      state: absent
+      register: delete
+  - name: exction of removed dir
+    debug:
+      msg: "{{delete}}"
+
